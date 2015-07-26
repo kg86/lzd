@@ -43,8 +43,9 @@ namespace algo{
 
 int main(int argc, char * argv[]){
   int ch;
-  std::string algoname;
+  std::string algoname = "";
   std::string in_fname, out_fname;
+  bool help = false;
   while ((ch = getopt(argc, argv, "f:a:d:o:h")) != -1) {
     switch (ch) {
     case 'f':
@@ -60,9 +61,18 @@ int main(int argc, char * argv[]){
       out_fname = optarg;
       break;
     case 'h':
-      usage(argv);
-      exit(1);
+      help = true;
     }
+  }
+  if (help ||!(
+        algoname == algo::LZD ||
+        algoname == algo::LZ78 ||
+        algoname == algo::LZVF_PRE || algoname == algo::LZVF_COUNT ||
+        algoname == algo::LZVF_CLEAN ||
+        algoname == algo::LZVF_PRE_NO_STREAM || algoname == algo::LZVF_COUNT_NO_STREAM
+        )){
+    usage(argv);
+    exit(1);
   }
 
   // std::cout << "input file : " << in_fname << std::endl;
