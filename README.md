@@ -12,7 +12,7 @@ To compile, you just type following.
 
 Note thta you may have to modify some settings in SConstruct for your environment.
 
-# Compression
+# Compress
 ## Usage
 ```sh
 % ./out/lzd
@@ -34,7 +34,7 @@ Options:
 
 Note that vfpre, vfcount and vfclean compress input file not storing whole input in main memory, but vfpre_no_stream, vfcount_no_stream do storing.
 
-## Example
+## Examples
 It compresses "SConstruct", and output to "hoge.lzd" by the algorithm LZD.
 
 ```sh
@@ -47,7 +47,7 @@ It compresses "SConstruct", and output to "hoge.vfpre10" by the algorithm LZDVF 
 % out/lzd -f SConstruct -o hoge.vfpre10 -a vfpre -l 10
 ```
 
-# Decompression
+# Decompress
 ## Usage
 ```sh
 % out/lzdDecompress
@@ -65,7 +65,7 @@ Options               :
   -a vfcount_no_stream : LZD VF (Count Base)
 ```
 
-## Example
+## Examples
 It decompresses "hoge.lzd" compressed by LZD, and output to "fuga.lzd".
 
 ```sh
