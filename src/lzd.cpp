@@ -12,7 +12,7 @@
 #include "common_utils.hpp"
 #include "common.hpp"
 
-#include "lzFF.hpp"
+#include "lzd.hpp"
 #include "string_tree_ns.hpp"
 #include "string_tree_limited_ns.hpp"
 #include "string_tree_pre_ns.hpp"

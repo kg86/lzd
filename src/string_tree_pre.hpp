@@ -10,7 +10,7 @@
 #include "LRUList.hpp"
 #include "string_tree_limited.hpp"
 #include "common_utils.hpp"
-#include "lzFF.hpp"
+#include "lzd.hpp"
 
 namespace STreePre {
   class STreePre : public STreeLimit{

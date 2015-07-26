@@ -8,7 +8,7 @@
 #include <cassert>
 
 #include "common.hpp"
-#include "lzFF.hpp"
+#include "lzd.hpp"
 #include "lz78.hpp"
 #include "string_tree_pre.hpp"
 #include "string_tree_occ.hpp"

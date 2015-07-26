@@ -14,7 +14,7 @@
 #include "string_tree_occ.hpp"
 #include "string_tree_clean.hpp"
 
-#include "lzFF.hpp"
+#include "lzd.hpp"
 #include "lz78.hpp"
 #include "slp2enc.hpp"
 

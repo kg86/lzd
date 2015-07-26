@@ -9,7 +9,7 @@
 #include "string_tree.hpp"
 #include "string_tree_limited.hpp"
 #include "common_utils.hpp"
-#include "lzFF.hpp"
+#include "lzd.hpp"
 
 namespace STreeClean {
   class STreeClean : public STreeLimit{

@@ -9,7 +9,7 @@
 #include "string_tree.hpp"
 #include "string_tree_limited.hpp"
 #include "common_utils.hpp"
-#include "lzFF.hpp"
+#include "lzd.hpp"
 
 namespace STreeOcc {
   class STreeOcc : public STreeLimit{

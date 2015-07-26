@@ -37,7 +37,7 @@ sources_common = [SRC_DIR + src for src in ['common.cpp',
                                             'string_tree.cpp',
                                             'slp2enc.cpp',
                                             'lz78.cpp',
-                                            'lzff.cpp',
+                                            'lzd.cpp',
                                             'string_tree_ns.cpp',
                                             ]]
 sources_lcacomp = [SRC_DIR +'lcacomp/' + src for src in ['bits.c',
@@ -49,8 +49,8 @@ objects_common = makeObj(env, sources_common, '.o')
 debug_obj_common = makeObj(envDebug, sources_common, '.debug.o')
 
 progs = [
-    ['lzFFMain.cpp', 'lzFF'],
-    ['lzFFdecompressMain.cpp', 'lzFFdecompress']
+    ['lzdMain.cpp', 'lzd'],
+    ['lzdDecompressMain.cpp', 'lzdDecompress']
     ]
 
 for fin, fout in progs:

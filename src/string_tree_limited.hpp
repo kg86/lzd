@@ -10,7 +10,7 @@
 
 #include "string_tree.hpp"
 #include "common_utils.hpp"
-#include "LZFF.hpp"
+#include "lzd.hpp"
 
 class STreeLimit : public STree::Tree{
 protected:
