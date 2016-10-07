@@ -1,6 +1,11 @@
 The MIT License (MIT)
 
-Copyright (c) 2015 
+Copyright (c) 2015 Keisuke GOTO
+
+This software also uses portions of lcacomp, which are BSD 3-Clause licensed
+with the following copyrights:
+
+Copyright (c) 2011-2012 Shirou Maruyama
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
