@@ -22,6 +22,7 @@ void usage(char * argv []){
 	      << "  -o FileName         : output file" << std::endl
 	      << "  -d NUM              : debug mode" << std::endl
               << "  -a lz78       : LZ78" << std::endl
+              << "  -a lzmw       : LZMW" << std::endl
               << "  -a lzd        : LZD" << std::endl
               << "  -a vfpre      : LZD VF (Prefix Base)" << std::endl
               << "  -a vfcount    : LZD VF (Count Base)" << std::endl
@@ -33,6 +34,7 @@ void usage(char * argv []){
 
 namespace algo{
   std::string LZD = "lzd";
+  std::string LZMW = "lzmw";
   std::string LZ78 = "lz78";
   std::string LZVF_PRE   = "vfpre";
   std::string LZVF_COUNT = "vfcount";
@@ -66,6 +68,7 @@ int main(int argc, char * argv[]){
   }
   if (help ||!(
         algoname == algo::LZD ||
+        algoname == algo::LZMW ||
         algoname == algo::LZ78 ||
         algoname == algo::LZVF_PRE || algoname == algo::LZVF_COUNT ||
         algoname == algo::LZVF_CLEAN ||
@@ -79,7 +82,8 @@ int main(int argc, char * argv[]){
   // std::cout << "output file : " << out_fname << std::endl;
   std::ifstream ifs(in_fname.c_str(), std::ios::in | std::ios::binary);
   std::ofstream iofs(out_fname.c_str());
-  if (algoname == algo::LZD ||
+  if (algoname == algo::LZMW ||
+      algoname == algo::LZD ||
       algoname == algo::LZ78) {
     encSLP_decompress(in_fname, out_fname);
   } else if (algoname == algo::LZ78) {

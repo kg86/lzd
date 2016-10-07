@@ -27,6 +27,7 @@ void usage(char * argv []){
 	      << "  -d NUM              : set the debug level" << std::endl
 	      << "  -l maxSize          : set max code size" << std::endl
               << "  -a lz78       : LZ78" << std::endl
+              << "  -a lzmw       : LZMW" << std::endl
               << "  -a lzd        : LZD" << std::endl
               << "  -a vfpre      : LZD VF (Prefix Base)" << std::endl
               << "  -a vfcount    : LZD VF (Count Base)" << std::endl
@@ -38,6 +39,7 @@ void usage(char * argv []){
 
 namespace algo{
   std::string LZ78       = "lz78";
+  std::string LZMW       = "lzmw";
   std::string LZD        = "lzd";
   std::string LZVF_PRE   = "vfpre";
   std::string LZVF_COUNT = "vfcount";
@@ -77,7 +79,7 @@ int main(int argc, char * argv[]){
     }
   }
   if (help ||!(
-        algoname == algo::LZD ||
+        algoname == algo::LZD || algoname == algo::LZMW ||
         algoname == algo::LZ78 ||
         algoname == algo::LZVF_PRE || algoname == algo::LZVF_COUNT ||
         algoname == algo::LZVF_CLEAN ||
@@ -99,6 +101,8 @@ int main(int argc, char * argv[]){
     LZFF::seq2vars(ff.seq, vars);
     std::cout << "vars.size()=" << vars.size() << std::endl;
     slp2enc(vars, (unsigned int) s.size(), out_fname);
+  }else if (algoname == algo::LZMW) {
+    LZFF::mw_compress(inFile, out_fname);
   } else if (algoname == algo::LZ78) {
     std::vector<std::pair<unsigned int, unsigned int> > vars;
     LZ78::LZ78 lz78;

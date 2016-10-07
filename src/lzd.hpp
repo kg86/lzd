@@ -80,6 +80,8 @@ namespace LZFF {
    */
   unsigned int ff_compress(std::string & str, LZD & lz);
 
+  unsigned int mw_compress(const std::string & in_fname, const std::string & out_fname);
+
   /**
    *  computes LZD VF based on prefix strategy
    *
@@ -99,6 +101,17 @@ namespace LZFF {
    *  @return the length of the lzvf sequence
    */
   unsigned int ffocc_compress(const std::string & str, unsigned int codeSize, LZD & ff);
+
+  /**
+   *  computes LZMW
+   *
+   *  @param lz   factor sequence
+   *  @param vars variables made in factorizing process
+   *  @param tree dictionary tree
+   *
+   *  @return the length of the lzmw sequence
+   */
+  unsigned int lzMW(std::vector<unsigned int> * lz, std::vector<std::pair<unsigned int, unsigned int> > * vars, NOT_STREAM::STree::Tree & tree);
 
   /**
    *  decompresses LZD
@@ -131,5 +144,16 @@ namespace LZFF {
    *  @param vars output SLP
    */
   void seq2vars(const std::vector<std::pair<unsigned int, unsigned int> > & seq, std::vector<std::pair<unsigned int, unsigned int> > & vars);
+
+  /**
+   *  computes an SLP from a factor sequence of LZMW by concatenating adjacent factors
+   *
+   *  @param seq  factor sequence of LZMW
+   *  @param vars variables of LZMW
+   *  @param vars output SLP
+   */
+  void seq2varsMW(const std::vector<unsigned int> & in_seq,
+                  const std::vector<std::pair<unsigned int, unsigned int> > & in_vars,
+                  std::vector<std::pair<unsigned int, unsigned int> > & out_vars);
 
 };

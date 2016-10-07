@@ -189,6 +189,61 @@ namespace LZFF{
     return ff_compress(lz, tree);
   }
 
+  unsigned int mw_compress(const std::string & in_fname,
+                           const std::string & out_fname) {
+    std::string in_str;
+    std::vector<std::pair<unsigned int, unsigned int> > * lz = new std::vector<std::pair<unsigned int, unsigned int> >();
+    std::vector<unsigned int> * lzseq = new std::vector<unsigned int>();
+    std::vector<std::pair<unsigned int, unsigned int> > vars;
+
+    UTIL::stringFromFile(in_fname, in_str);
+
+    NOT_STREAM::STree::Tree tree(in_str);
+    LZFF::lzMW(lzseq, lz, tree);
+    LZFF::seq2varsMW(*lzseq, *lz, vars);
+    slp2enc(vars, (unsigned int) in_str.size(), out_fname);
+    return lzseq->size();
+  }
+
+  unsigned int lzMW(std::vector<unsigned int> * lz,
+                    std::vector<std::pair<unsigned int, unsigned int> > * vars, NOT_STREAM::STree::Tree & tree){
+    assert(tree.root != NULL);
+    unsigned int p = 0;
+    unsigned int vcount = 0;
+    unsigned int n = (unsigned int) tree.getStrSize();
+    std::string str_for_debug = "";
+    for(size_t i = 0; i < CHAR_SIZE; i++){
+      vars->push_back(std::make_pair(-1, -1));
+      tree.insertCharNode((unsigned char)i);
+    }
+    NOT_STREAM::STree::Node * prevFactor = tree.findLastFNodeFrom(tree.root, p);
+    NOT_STREAM::STree::Node * prevprevFactor = NULL;
+    lz->push_back(prevFactor->fid - 1);
+    p = 1;
+    while (p < n){
+      NOT_STREAM::STree::Node * cur_factor =  tree.findLastFNodeFrom(tree.root, p);
+      assert(cur_factor != NULL);
+      assert(cur_factor != tree.root);
+      assert(p + cur_factor->depth <= n);
+      if (prevFactor != cur_factor || prevprevFactor != cur_factor) {
+        //pos: i-2 i-1  i
+        //seq:  X   X   X
+        // Since we create a new variable such that pair(X, X) at i-1,
+        // we do not create the same variable at i
+        tree.insertFactorNode(prevFactor, p, cur_factor->depth);
+        vars->push_back(std::make_pair(prevFactor->fid - 1, cur_factor->fid - 1));
+      }
+      lz->push_back(cur_factor->fid - 1);
+      prevprevFactor = prevFactor;
+      prevFactor = cur_factor;
+
+      p += cur_factor->depth;
+      vcount++;
+    }
+
+    return (unsigned int) lz->size();
+  }
+
   void seq2vars(const std::vector<std::pair<unsigned int, unsigned int> > & in_seq,
                 std::vector<std::pair<unsigned int, unsigned int> > & vars){
     std::vector<unsigned int> * seq = new std::vector<unsigned int>();
@@ -247,6 +302,61 @@ namespace LZFF{
       seqsize = new_seqsize;
     }
     delete seq;
+  }
+
+  void seq2varsMW(const std::vector<unsigned int> & in_seq,
+                  const std::vector<std::pair<unsigned int, unsigned int> > & in_vars,
+                  std::vector<std::pair<unsigned int, unsigned int> > & out_vars){
+    std::vector<int> prev;
+    std::vector<int> seq;
+    std::vector<int> normalized_var(in_vars.size(), -1);
+    std::map<std::pair<int, int>, int> inv_vars;
+    std::map<std::pair<int, int>, int>::iterator itr;
+    std::vector<unsigned int> count_prev_unused(in_vars.size(), 1);
+    out_vars.clear();
+    out_vars.assign(in_vars.begin(), in_vars.begin()+CHAR_SIZE);
+    for(size_t i = 0; i < CHAR_SIZE; i++){
+      count_prev_unused[i] = 0;
+    }
+    for(size_t i = 0; i < in_seq.size(); i++){
+      assert(in_seq[i] < (unsigned int) in_vars.size());
+      count_prev_unused[in_seq[i]] = 0;
+    }
+
+    unsigned int unused_var = 0;
+    for(unsigned int i = 0; i < count_prev_unused.size(); i++){
+      if (count_prev_unused[i] == 0) normalized_var[i] = i-unused_var;
+      unused_var += count_prev_unused[i];
+      count_prev_unused[i] = unused_var;
+    }
+    for(size_t i = CHAR_SIZE; i < in_vars.size(); i++){
+      if (normalized_var[i] >= 0){
+        std::pair<int, int> new_var;
+        new_var.first = normalized_var[in_vars[i].first];
+        new_var.second = normalized_var[in_vars[i].second];
+        inv_vars[new_var] = (unsigned int) out_vars.size();
+        out_vars.push_back(new_var);
+      }
+    }
+    for(size_t i = 0; i < in_seq.size(); i++){
+      prev.push_back(normalized_var[in_seq[i]]);
+    }
+
+    while(prev.size() > 1){
+      seq.clear();
+      for(size_t i = 1; i < prev.size(); i+=2){
+        itr = inv_vars.find(std::make_pair(prev[i-1], prev[i]));
+        if (itr != inv_vars.end()){
+          seq.push_back((*itr).second);
+        }else{
+          seq.push_back((unsigned int) out_vars.size());
+          inv_vars[std::make_pair(prev[i-1], prev[i])] = (unsigned int) out_vars.size();
+          out_vars.push_back(std::make_pair(prev[i-1], prev[i]));
+        }
+      }
+      if (prev.size() % 2 == 1) seq.push_back(prev.back());
+      prev = seq;
+    }
   }
 
   inline NOT_STREAM::STree::Node * getLPF(LZD &ff, NOT_STREAM::STreeLimit * tree, unsigned int p){
