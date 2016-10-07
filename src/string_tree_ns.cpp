@@ -277,12 +277,12 @@ Node * Tree::splitEdge(Node * par, Node * child, unsigned int len){
   return middleNode;
 }
 
-unsigned int Tree::findLastNodeIdFrom(const Node * cur, unsigned int strbegin, bool findFNode, unsigned int len) const{
+unsigned int Tree::findLastNodeIdFrom(const Node * cur, unsigned long long strbegin, bool findFNode, unsigned int len) const{
   if (len == UINT_MAX) len = (unsigned int) this->getStrSize();
   assert(cur != NULL);
   const Node * lastFNode = NULL;
   if (findFNode && cur->isFactor()) lastFNode = cur;
-  unsigned int i = strbegin;
+  unsigned long long i = strbegin;
   while(cur && i < this->getStrSize()){
 
     Node * child = getChild(cur, i);

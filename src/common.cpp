@@ -26,7 +26,7 @@ namespace UTIL{
       return;
     }
     fileSize = st.st_size;
-    if(fileSize != static_cast<size_t>(static_cast<int>(fileSize))){
+    if(fileSize != static_cast<size_t>(static_cast<size_t>(fileSize))){
       std::cerr << "ERROR: The file size is too big to fit in int. Cannot process." << std::endl;
       return;
     }

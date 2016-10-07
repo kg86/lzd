@@ -245,7 +245,7 @@ namespace STree{
      * 
      * @return 
      */
-    unsigned int findLastNodeIdFrom(const Node * node, unsigned int strbegin, bool findFNode, unsigned int len = UINT_MAX) const;
+    unsigned int findLastNodeIdFrom(const Node * node, unsigned long long strbegin, bool findFNode, unsigned int len = UINT_MAX) const;
     inline Node * findLastNodeFrom(const Node * node, unsigned int strbegin, bool findFNode, unsigned int len = UINT_MAX) const{
       return this->getNode(this->findLastNodeIdFrom(node, strbegin, findFNode, len));
     }
