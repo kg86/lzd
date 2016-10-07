@@ -94,12 +94,10 @@ int main(int argc, char * argv[]){
   if (algoname == algo::LZD){
     UTIL::stringFromFile(inFile, s);
     LZFF::LZD ff;
-    std::cout << (LZFF::ff_compress(s, ff)) << std::endl;
-    std::cout << "convert to SLPs" << std::endl;
+    LZFF::ff_compress(s, ff);
     std::vector<std::pair<unsigned int, unsigned int> > vars;
     std::string outSLP;
     LZFF::seq2vars(ff.seq, vars);
-    std::cout << "vars.size()=" << vars.size() << std::endl;
     slp2enc(vars, (unsigned int) s.size(), out_fname);
   }else if (algoname == algo::LZMW) {
     LZFF::mw_compress(inFile, out_fname);
