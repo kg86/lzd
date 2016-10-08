@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Visualization of LZD and LZ78</title>
+
+<script type="text/javascript" src="main.js"></script>
+
+</head>
+<body onload="drawText();">
+
+<div id="controlDIV">
+  <p> 
+    Input Text: <input type="text" id="CW" size="100" maxlength="300" value="ababab"
+onKeyUp="drawText()"
+>
+  </p>
+</div>
+
+LZD (above) and LZ78 (below) factorization of the input text.
+<div id="treeDIV" style="width:1600px; height:auto;border: 1px solid #006633; ">
+<canvas id="TREE" width=1600 height=500> </canvas>
+</div>
+
+
+</body>
+</html>
+
+
