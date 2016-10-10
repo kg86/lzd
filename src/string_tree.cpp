@@ -315,8 +315,7 @@ Node * Tree::splitEdge(Node * par, Node * child, unsigned int len){
   assert(child->parent == par);
   assert(child->edgeLen() > len);
   // deletes link from $par to $child
-  const bool res_unlink = this->unlinkChild(par, child);
-  assert(res_unlink);
+  this->unlinkChild(par, child);
 
   // inserts a branch node
   Node * middleNode = this->addChild(par, false, child->label, 0, len);

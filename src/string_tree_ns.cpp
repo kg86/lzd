@@ -263,8 +263,7 @@ Node * Tree::splitEdge(Node * par, Node * child, unsigned int len){
   assert(child->parent == par);
   assert(child->in_edge_len > len);
   // deletes link from $par to $child
-  const bool res_unlink = this->unlinkChild(par, child);
-  assert(res_unlink);
+  this->unlinkChild(par, child);
 
   // inserts a branch node
   Node * middleNode = this->addChild(par, false, child->in_edge_begin, len);
@@ -315,7 +314,7 @@ unsigned int Tree::LCPToNode(const Node * node, unsigned int strbegin, unsigned 
   if (len == 0) return 0;
   assert(node != NULL);
   unsigned int lcp = 0;
-
+  
   if (node->depth == 1){
     if (getInFirstChar(node) == str[strbegin]) return 1;
     else return 0;
