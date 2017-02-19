@@ -8,6 +8,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <cstdlib>
 
 #include "common.hpp"
 
