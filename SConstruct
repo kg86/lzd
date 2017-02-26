@@ -5,8 +5,16 @@ OUT_DIR = "out/"
 import os, sys, glob
 import types
 
+include = '/usr/include'
+lib = '/usr/lib'
+if sys.platform == 'darwin':
+    include = '/opt/local/include'
+    lib = '/opt/local/lib'
+
 cxx = ARGUMENTS.get('cxx', '/usr/bin/clang++')
 cc = ARGUMENTS.get('cc', '/usr/bin/clang')
+lib = ARGUMENTS.get('lib', lib) # /opt/local/lib for mac os
+include = ARGUMENTS.get('include', include) # /opt/local/include for mac os
 env = Environment(ENV = {'PATH' : os.environ['PATH']},
                   CC = cc, CXX = cxx,
                   CXXFLAGS="-Wall -Ofast -DNDEBUG",
@@ -66,20 +74,24 @@ def runUnitTest(env,target,source):
     if not subprocess.call(app,cwd="./tests"):
         open(str(target[0]),'w').write("PASSED\n")
 
-if os.path.exists('/opt/local/lib/libgtest.a') and os.path.exists('/opt/local/lib/libgtest_main.a'):
+gtest = os.path.join(lib, 'libgtest.a')
+gtest_main = os.path.join(lib, 'libgtest_main.a')
+print gtest, gtest_main
+if os.path.exists(gtest) and os.path.exists(gtest_main):
     testProg = OUT_DIR + 'runTests'
-    envTEST = env.Clone(CPPPATH = ['./', '/opt/local/include'],
-                        LIBPATH=['/opt/local/lib', './'],
-                        LIBS=['gtest', 'gtest_main', 
-                              ])
-    envTESTDebug = envDebug.Clone(CPPPATH = ['./', '/opt/local/include'],
-                        LIBPATH=['/opt/local/lib', './'],
-                        LIBS=['gtest', 'gtest_main'],
+    envTEST = env.Clone(CPPPATH = ['./', include],
+                        LIBPATH=[lib, './'],
+                        LIBS=['pthread']
+                        )
+    envTESTDebug = envDebug.Clone(CPPPATH = ['./', include],
+                        LIBPATH=[lib, './'],
+                        LIBS=['pthread'],
                         CCFLAGS="-g -Wall -O0  -DDEBUG")
     objects_onlyfor = envTEST.Object(glob.glob('tests/*Tests.cpp'))
-    program = envTEST.Program(testProg, objects_common + objects_onlyfor)
+    program = envTEST.Program(testProg, objects_common + objects_onlyfor + [gtest, gtest_main])
 
-    envTESTDebug.Program(testProg + '.debug', debug_obj_common + makeObj(envTESTDebug, glob.glob('tests/*Tests.cpp'), '.debug.o'))
+    objects_onlyfor_debug = makeObj(envTESTDebug, glob.glob('tests/*Tests.cpp'), '.debug.o')
+    envTESTDebug.Program(testProg + '.debug', debug_obj_common + objects_onlyfor_debug + [gtest, gtest_main])
 
     Command("tests.passed", testProg, runUnitTest)
 
