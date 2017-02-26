@@ -7,5 +7,5 @@ COPY ./ /root/app/
 
 WORKDIR /root/app
 
-RUN /root/app/install_gtest_ubuntu.sh
+RUN /root/app/scripts/install_gtest_ubuntu.sh
 RUN scons
